@@ -60,11 +60,11 @@ class LEAR(object):
 
         """
 
-        # # Applying Invariant, aka asinh-median transformation to the prices
-        [Ytrain], self.scalerY = scaling([Ytrain], "Invariant")
+        # # Applying Invariant, aka asinh-median transformation to the prices : unavailable for constant 0 input.
+        [Ytrain], self.scalerY = scaling([Ytrain], "Norm")
 
         # # Rescaling all inputs except dummies (7 last features)
-        [Xtrain_no_dummies], self.scalerX = scaling([Xtrain[:, :-7]], "Invariant")
+        [Xtrain_no_dummies], self.scalerX = scaling([Xtrain[:, :-7]], "Norm")
         Xtrain[:, :-7] = Xtrain_no_dummies
 
         self.models = {}
@@ -343,9 +343,6 @@ class LEAR(object):
         ) = self._build_and_split_XYs(
             df_train=df_train, df_test=df_test, date_test=next_day_date
         )
-
-        print(Xtrain)
-        print(Xtest)
 
         # Recalibrating the LEAR model and extracting the prediction
         Yp = self.recalibrate_predict(Xtrain=Xtrain, Ytrain=Ytrain, Xtest=Xtest)
